@@ -95,7 +95,7 @@ public class Recognition {
 		logger.info("*** STEP 1 - Upload Images ***");
 
 		// Set the maximum number of concurrent uploads
-		int concurrentUploads = 3;
+		int concurrentUploads = 1;
 		int concurrentCount = 0;
 		Thread[] pool = new Thread[concurrentUploads];
 		for (File person : peoples) {
@@ -132,7 +132,7 @@ public class Recognition {
 	}
 
 	private static void step2_AddObjectsToGroup() throws IOException {
-		logger.info("*** STEP 2 - Adding People to Group 'family' ***");
+		logger.info("*** STEP 2 - Adding People to Group  ***");
 		String groupId = "family";
 		final String api = BASE_URL + "group/" + URLEncoder.encode(groupId, "UTF-8");
 		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
@@ -149,7 +149,7 @@ public class Recognition {
 
 	private static void step3_TrainGroup(String groupId) throws IOException {
 		logger.info("*** Step 3 - Training Group '${groupId}' ***");
-		final String api = BASE_URL + "group/" + URLEncoder.encode(groupId, "UTF-8") + "/training";
+		final String api = BASE_URL + "group/" + URLEncoder.encode(groupId, "UTF-8") + "/training2";
 		httpCall(api, "POST", contentTypeJson, null);
 
 	}
@@ -236,7 +236,8 @@ public class Recognition {
 			}
 			step1_UploadImages();
 			step2_AddObjectsToGroup();
-			step3_TrainGroup("family");
+//			step3_TrainGroup("family");
+//			step3_TrainGroup("friends");
 //			step4_TestReco("family");
 		} else {
 			logger.info("Failed to find images at " + images.getCanonicalPath());
