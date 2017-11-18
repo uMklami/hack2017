@@ -35,7 +35,7 @@ public class Recognizer {
     }
 	
 	public static File getRecognize(File image) throws IOException{
-		final String api = Recognition.BASE_URL + "recognition?groupId=" + URLEncoder.encode("family", "UTF-8");
+		final String api = Recognition.BASE_URL + "recognition?groupId=" + URLEncoder.encode("friends", "UTF-8");
 		File outFolder = new File(Recognition.workingFolder + File.separator + "out");
 		outFolder.mkdir();
 		File returnfile = null;
