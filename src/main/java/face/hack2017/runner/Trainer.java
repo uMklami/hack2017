@@ -22,12 +22,29 @@ import face.hack2017.Recognition;
 
 public class Trainer {
 
-	public void train(File directory) {
-		
+	public void train() {
 		try {
-			UploadImages();
-			AddObjectsToGroup();
-			TrainGroup("friends");
+			if (workingFolder == null) {
+				workingFolder = new File(".").getCanonicalPath();
+			}
+			if (imageFolder == null) {
+				// imageFolder = workingFolder + File.separator + ".." +
+				// File.separator + ".." + File.separator + "images";
+				imageFolder = "images";
+			}
+			logger.info(imageFolder);
+			File images = new File(imageFolder + File.separator + "training2");
+			if (images.exists()) {
+				for (File person : images.listFiles()) {
+					if (person.isDirectory()) {
+						peoples.add(person);
+					}
+				}
+
+				UploadImages();
+				AddObjectsToGroup();
+				TrainGroup("friends");
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,6 +52,7 @@ public class Trainer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
 	// TODO: Replace TOKEN with your own Sighthound Cloud Token
@@ -52,9 +70,9 @@ public class Trainer {
 	private static String imageFolder = null;
 	// working folder if different from default folder
 	public static String workingFolder = null;
-	
+
 	public static String group = null;
-	
+
 	// java logging
 	private static Logger logger = Logger.getLogger(Recognition.class.getName());
 
@@ -146,8 +164,8 @@ public class Trainer {
 	}
 
 	private static void AddObjectsToGroup() throws IOException {
-		logger.info("Adding Images to "+group);
-		String groupId = "family";
+		logger.info("Adding Images to " + group);
+		String groupId = "friends";
 		final String api = BASE_URL + "group/" + URLEncoder.encode(groupId, "UTF-8");
 		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
 		for (File person : peoples) {
