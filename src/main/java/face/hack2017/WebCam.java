@@ -93,7 +93,7 @@ public class WebCam extends JFrame {
 
 	private Executor executor = Executors.newSingleThreadExecutor();
 
-	private Dimension size = WebcamResolution.QQVGA.getSize();
+	private Dimension size = WebcamResolution.VGA.getSize();
 
 	private List<Webcam> webcams = Webcam.getWebcams();
 	private List<WebcamPanel> panels = new ArrayList<WebcamPanel>();
@@ -130,6 +130,7 @@ public class WebCam extends JFrame {
 		pack();
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo (null);
 	}
 
 	public static void main(String[] args) {
