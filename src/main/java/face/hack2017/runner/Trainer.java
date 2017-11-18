@@ -33,7 +33,7 @@ public class Trainer {
 				imageFolder = "images";
 			}
 			logger.info(imageFolder);
-			File images = new File(imageFolder + File.separator + "training2");
+			File images = new File(imageFolder + File.separator + "training");
 			if (images.exists()) {
 				for (File person : images.listFiles()) {
 					if (person.isDirectory()) {
@@ -43,7 +43,7 @@ public class Trainer {
 
 				UploadImages();
 				AddObjectsToGroup();
-				TrainGroup("friends");
+				TrainGroup("family");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -181,7 +181,7 @@ public class Trainer {
 
 	private static void TrainGroup(String groupId) throws IOException {
 		logger.info("Training Session for '${groupId}'");
-		final String api = BASE_URL + "group/" + URLEncoder.encode(groupId, "UTF-8") + "/training2";
+		final String api = BASE_URL + "group/" + URLEncoder.encode(groupId, "UTF-8") + "/training";
 		httpCall(api, "POST", contentTypeJson, null);
 
 	}
