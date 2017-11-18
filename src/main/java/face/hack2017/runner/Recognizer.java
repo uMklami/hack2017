@@ -120,25 +120,7 @@ public class Recognizer {
 			}
 			ImageIO.write(imageBuffer, "JPG", new File(outFolder
 					+ File.separator + image.getName()));
+			Text2Speach.dospeak("Hi "+name+ "how are you doing?", "kevin16");
 		}
 	}
-
-	private static final String VOICE_NAME_KEVIN = "kevin16";
-	private static Voice voice;
-
-	static void mySpeak(String name) {
-
-		VoiceManager vm = VoiceManager.getInstance();
-		voice = vm.getVoice(VOICE_NAME_KEVIN);
-		voice.allocate();
-		try {
-			voice.speak("Hi " + name + " is there anything i can help you?");
-		} catch (Exception e) {
-		}
-	}
-
-	public static void main(String[] args) throws IOException {
-		mySpeak("Anies Faziehan Zakaria");
-	}
-
 }
