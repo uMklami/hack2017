@@ -2,7 +2,9 @@ package face.hack2017;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,13 +34,25 @@ public class WebCam extends JFrame {
 
 //		@Override
 		public void actionPerformed(ActionEvent e) {
+			
+			
 			try {
 				for (int i = 0; i < webcams.size(); i++) {
 					Webcam webcam = webcams.get(i);
-					File file = new File(String.format("test-%d.jpg", i));
+					File file = new File(String.format("snaps/test-1.jpg"));
 					ImageIO.write(webcam.getImage(), "JPG", file);
+					
 					System.out.format("The picture for %s saved in %s \n", webcam.getName(), file);
-					Recognizer.DisplayImage(Recognizer.getRecognize(file));
+					
+					 Recognizer.getRecognize(file);
+					// BufferedImage imageBuffer = ImageIO.read(newfile);
+					//
+					// File resutfile = new
+					// File(String.format("snaps/result-1.jpg"));
+					//
+					// ImageIO.write(imageBuffer, "JPG", resutfile);
+					//
+					 Recognizer.DisplayImage(new File("out/test-1.jpg"));
 					
 				}
 			} catch (IOException e1) {
