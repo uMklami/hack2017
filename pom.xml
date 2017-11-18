@@ -52,6 +52,13 @@
 			<artifactId>freetts</artifactId>
 			<version>1.2.2</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-jsapi -->
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jsapi</artifactId>
+			<version>3.1.4.Final</version>
+		</dependency>
+
 
 
 	</dependencies>

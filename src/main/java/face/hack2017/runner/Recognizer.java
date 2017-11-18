@@ -6,11 +6,14 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -19,8 +22,14 @@ import javax.json.JsonObject;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.speech.*;
 
 import com.sun.speech.freetts.Voice;
+
+import java.util.*;
+
+import javax.speech.synthesis.*; 
+
 import com.sun.speech.freetts.VoiceManager;
 
 import face.hack2017.Recognition;
@@ -123,22 +132,58 @@ public class Recognizer {
 		}
 	}
 
-	private static final String VOICE_NAME_KEVIN = "kevin16";
-	private static Voice voice;
+	private static final String VOICENAME = "kevin16";
 
-	static void mySpeak(String name) {
+	static void doSpeak(String name) throws IOException{
+		Voice voice;
+		  VoiceManager voiceManager = VoiceManager.getInstance();
+		  voice = voiceManager.getVoice(VOICENAME);
 
-		VoiceManager vm = VoiceManager.getInstance();
-		voice = vm.getVoice(VOICE_NAME_KEVIN);
-		voice.allocate();
-		try {
-			voice.speak("Hi " + name + " is there anything i can help you?");
-		} catch (Exception e) {
-		}
+		  voice.allocate();
+
+		  voice.setRate(120);
+		  voice.setPitch(100);
+		  System.out.print("Enter your text: ");
+		  BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		  voice.speak("Can u speak loader "+ name);
+		
 	}
+	
+//	public static void doSpeak(String speak, String voicename)
+//    {
+//      String speaktext = speak;
+//      String voiceName = voicename;
+//      try
+//       {
+//       SynthesizerModeDesc desc = new SynthesizerModeDesc(null, "general", Locale.US, null, null);
+//        Synthesizer synthesizer = Central.createSynthesizer(desc);
+//        synthesizer.allocate();
+//        synthesizer.resume();
+//        desc = (SynthesizerModeDesc)synthesizer.getEngineModeDesc();
+//        Voice[] voices = desc.getVoices();
+//        Voice voice = null;
+//        for(int i = 0; i< voices. length; i++)
+//         {
+//          if(voices[i].getName().equals(voiceName))
+//           {
+//            voice = voices[i];
+//            break;
+//           }
+//         }
+//        synthesizer.getSynthesizerProperties().setVoice(voice);
+//        synthesizer.speakPlainText(speaktext, null);
+//        synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
+//        synthesizer.deallocate();
+//       }
+//      catch (Exception e)
+//       {
+//    	  String message = "missing speech properties in " + System.getProperty("user.home") + "\n";
+//           System.out.println (message+" "+e);
+//       }
+//    }
 
 	public static void main(String[] args) throws IOException {
-		mySpeak("Anies Faziehan Zakaria");
+		doSpeak("Anies Faziehan Zakaria");
 	}
 
 }
