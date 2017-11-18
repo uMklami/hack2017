@@ -54,12 +54,6 @@ public class WebCam extends JFrame {
 
 			btStart.setEnabled(false);
 			btSnapMe.setEnabled(true);
-
-			// remember to start panel asynchronously - otherwise GUI will be
-			// blocked while OS is opening webcam HW (will have to wait for
-			// webcam to be ready) and this causes GUI to hang, stop responding
-			// and repainting
-
 			executor.execute(this);
 		}
 

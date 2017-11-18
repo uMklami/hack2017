@@ -1,10 +1,5 @@
-package face.hack2017;
+package face.hack2017.runner;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,15 +12,31 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.imageio.ImageIO;
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 
-public class Recognition {
+import face.hack2017.Recognition;
+
+public class Trainer {
+
+	public void train(File directory) {
+		
+		try {
+			UploadImages();
+			AddObjectsToGroup();
+			TrainGroup("friends");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	// TODO: Replace TOKEN with your own Sighthound Cloud Token
 	public static final String TOKEN = "uY5kIX3zmFp4pqeUxVeCbgh6IF0HJoHCnpfI";
 	public static final String BASE_URL = "https://dev.sighthoundapi.com/v1/";
@@ -41,6 +52,9 @@ public class Recognition {
 	private static String imageFolder = null;
 	// working folder if different from default folder
 	public static String workingFolder = null;
+	
+	public static String group = null;
+	
 	// java logging
 	private static Logger logger = Logger.getLogger(Recognition.class.getName());
 
@@ -91,8 +105,8 @@ public class Recognition {
 		}
 	}
 
-	private static void step1_UploadImages() throws IOException, InterruptedException {
-		logger.info("*** STEP 1 - Upload Images ***");
+	private static void UploadImages() throws IOException, InterruptedException {
+		logger.info("Uploading Images");
 
 		// Set the maximum number of concurrent uploads
 		int concurrentUploads = 3;
@@ -131,8 +145,8 @@ public class Recognition {
 		}
 	}
 
-	private static void step2_AddObjectsToGroup() throws IOException {
-		logger.info("*** STEP 2 - Adding People to Group 'family' ***");
+	private static void AddObjectsToGroup() throws IOException {
+		logger.info("Adding Images to "+group);
 		String groupId = "family";
 		final String api = BASE_URL + "group/" + URLEncoder.encode(groupId, "UTF-8");
 		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
@@ -147,99 +161,11 @@ public class Recognition {
 
 	}
 
-	private static void step3_TrainGroup(String groupId) throws IOException {
-		logger.info("*** Step 3 - Training Group '${groupId}' ***");
+	private static void TrainGroup(String groupId) throws IOException {
+		logger.info("Training Session for '${groupId}'");
 		final String api = BASE_URL + "group/" + URLEncoder.encode(groupId, "UTF-8") + "/training";
 		httpCall(api, "POST", contentTypeJson, null);
 
 	}
 
-	private static void step4_TestReco(String groupId) throws IOException {
-		logger.info("*** Step 4 - Test the Face Recognition ***");
-		final String api = BASE_URL + "recognition?groupId=" + URLEncoder.encode(groupId, "UTF-8");
-		File outFolder = new File(workingFolder + File.separator + "out");
-		outFolder.mkdir();
-		File testFolder = new File(imageFolder + File.separator + "reco-test");
-		if (testFolder.exists()) {
-			for (File recoFile : testFolder.listFiles()) {
-				if (recoFile.isFile() && !recoFile.isHidden()) {
-					final byte[] data = Files.readAllBytes(Paths.get(recoFile.getCanonicalPath()));
-					JsonObject result = httpCall(api, "POST", contentTypeStream, data);
-					if (result != null) {
-						annotateImage(outFolder, recoFile, result.getJsonArray("objects"));
-					}
-				}
-			}
-		} else {
-			logger.info("Failed to find images at " + testFolder.getCanonicalPath());
-		}
-	}
-
-	// markup the image with bounding boxes, names, and confidence scores.
-	public static void annotateImage(File outFolder, File image, JsonArray objects) throws IOException {
-		if (outFolder.isDirectory() && image.isFile() && objects != null && objects.size() > 0) {
-			BufferedImage imageBuffer = ImageIO.read(image);
-			Graphics2D g = imageBuffer.createGraphics();// .getGraphics();
-			g.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-			g.setFont(new Font("Courier", Font.BOLD, 20));
-			for (int oi = 0; oi < objects.size(); oi++) {
-				JsonObject object = objects.getJsonObject(oi);
-				JsonObject faceAnnotation = object.getJsonObject("faceAnnotation");
-				JsonArray vertices = faceAnnotation.getJsonObject("bounding").getJsonArray("vertices");
-				double confidence = faceAnnotation.getJsonNumber("recognitionConfidence").doubleValue();
-				int nPoints = vertices.size();
-				int[] xPoints = new int[nPoints];
-				int[] yPoints = new int[nPoints];
-				for (int ni = 0; ni < nPoints; ni++) {
-					JsonObject point = vertices.getJsonObject(ni);
-					xPoints[ni] = point.getInt("x");
-					yPoints[ni] = point.getInt("y");
-				}
-				String name = object.getString("objectId");
-				if (confidence < recognitionConfidenceThreshold) {
-					name = "Unknown";
-					g.setColor(Color.YELLOW);
-					logger.info("An 'Unknown' person was found since recognition " + "confidence " + confidence
-							+ " is below the minimum threshold of " + recognitionConfidenceThreshold);
-				} else {
-					g.setColor(Color.decode("#73c7f1"));
-					logger.info("Recognized " + name + " with confidence " + confidence);
-				}
-				g.drawPolygon(xPoints, yPoints, nPoints);
-				int x = xPoints[nPoints - 1];
-				int y = yPoints[nPoints - 1];
-				g.drawString(name, x, y + 16);
-				g.drawString(String.valueOf(confidence), x, y + 36);
-			}
-			ImageIO.write(imageBuffer, "JPG",
-					new File(outFolder.getCanonicalPath() + File.separator + image.getName()));
-		}
-	}
-
-	/*** Main Function **/
-
-	public static void main(String[] args) throws IOException, InterruptedException {
-		if (workingFolder == null) {
-			workingFolder = new File(".").getCanonicalPath();
-		}
-		if (imageFolder == null) {
-	//		imageFolder = workingFolder + File.separator + ".." + File.separator + ".." + File.separator + "images";
-			imageFolder = "images";
-		}
-		logger.info(imageFolder);
-		File images = new File(imageFolder + File.separator + "training");
-		if (images.exists()) {
-			for (File person : images.listFiles()) {
-				if (person.isDirectory()) {
-					peoples.add(person);
-				}
-			}
-			step1_UploadImages();
-			step2_AddObjectsToGroup();
-			step3_TrainGroup("family");
-//			step4_TestReco("family");
-		} else {
-			logger.info("Failed to find images at " + images.getCanonicalPath());
-		}
-	}
 }
