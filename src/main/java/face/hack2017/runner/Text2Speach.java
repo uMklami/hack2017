@@ -19,20 +19,20 @@ public class Text2Speach {
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
         Central.registerEngineCentral("com.sun.speech.freetts.jsapi.FreeTTSEngineCentral");
         SynthesizerModeDesc desc = new SynthesizerModeDesc(null,"general",  Locale.US,null,null);    
-        Synthesizer synthesizer =  Central.createSynthesizer(desc);    
+        Synthesizer synthesizer =  Central.createSynthesizer(desc);   
+        synthesizer.getSynthesizerProperties().setSpeakingRate(50);
+
         synthesizer.allocate();    
         synthesizer.resume();     
         desc = (SynthesizerModeDesc)  synthesizer.getEngineModeDesc();     
         Voice[] voices = desc.getVoices();      
         Voice voice = new Voice();
-//        voice.setGender();
-//        voice.setAge(AGE_YOUNGER_ADULT | AGE_MIDDLE_ADULT);
+
         for (int i = 0; i < voices.length; i++)    
-        {    
+        {
             if (voices[i].getName().equals(voiceName))    
             {    
                 voice = voices[i];
-                
                 break;     
             }     
         }    

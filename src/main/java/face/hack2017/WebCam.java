@@ -43,13 +43,7 @@ public class WebCam extends JFrame {
 					System.out.format("The picture for %s saved in %s \n", webcam.getName(), file);
 					
 					 Recognizer.getRecognize(file);
-					// BufferedImage imageBuffer = ImageIO.read(newfile);
-					//
-					// File resutfile = new
-					// File(String.format("snaps/result-1.jpg"));
-					//
-					// ImageIO.write(imageBuffer, "JPG", resutfile);
-					//
+					
 					 Recognizer.DisplayImage(new File("out/test-1.jpg"));
 					
 				}

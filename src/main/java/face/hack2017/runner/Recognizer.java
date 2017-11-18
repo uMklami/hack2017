@@ -108,7 +108,7 @@ public class Recognizer {
 					yPoints[ni] = point.getInt("y");
 				}
 				name = object.getString("objectId");
-				// mood = object.getString(name);
+
 				if (confidence < 0.5) {
 					name = "Unknown";
 					g.setColor(Color.YELLOW);
