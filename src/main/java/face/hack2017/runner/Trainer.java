@@ -163,7 +163,7 @@ public class Trainer {
 
 	private static void TrainGroup(String groupId) throws IOException {
 		logger.info("Training Session for '${groupId}'");
-		final String api = BASE_URL + "group/" + URLEncoder.encode(groupId, "UTF-8") + "/training";
+		final String api = BASE_URL + "group/" + URLEncoder.encode(groupId, "UTF-8") + "/training2";
 		httpCall(api, "POST", contentTypeJson, null);
 
 	}

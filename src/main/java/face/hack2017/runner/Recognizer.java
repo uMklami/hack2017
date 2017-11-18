@@ -34,10 +34,11 @@ public class Recognizer {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 	
-	public static void getRecognize(File image) throws IOException{
+	public static File getRecognize(File image) throws IOException{
 		final String api = Recognition.BASE_URL + "recognition?groupId=" + URLEncoder.encode("family", "UTF-8");
 		File outFolder = new File(Recognition.workingFolder + File.separator + "out");
 		outFolder.mkdir();
+		File returnfile = null;
 		
 		if (image.isFile() && !image.isHidden()) {
 			final byte[] data = Files.readAllBytes(Paths.get(image.getCanonicalPath()));
@@ -45,13 +46,15 @@ public class Recognizer {
 			if (result != null) {
 				Recognition.annotateImage(outFolder, image, result.getJsonArray("objects"));
 			}
-			File returnfile = new File(outFolder+"/out/"+image+".jpg");
-			DisplayImage(returnfile);
+			returnfile = new File(outFolder+"/out/"+image+".jpg");
+//			DisplayImage(returnfile);
+			
 		}
+		return returnfile;
 	}
 	
-	public static void main(String[] args) throws IOException{
-		getRecognize(new File("D:\\Office Data\\OpenSourceProjects\\hack2017\\images\\reco-test\\IMG_9259.jpg"));
-	}
+//	public static void main(String[] args) throws IOException{
+//		getRecognize(new File("D:\\Office Data\\OpenSourceProjects\\hack2017\\images\\reco-test\\IMG_9259.jpg"));
+//	}
 
 }

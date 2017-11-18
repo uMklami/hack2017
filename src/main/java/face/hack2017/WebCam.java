@@ -19,6 +19,8 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 
+import face.hack2017.runner.Recognizer;
+
 @SuppressWarnings("serial")
 public class WebCam extends JFrame {
 
@@ -35,7 +37,9 @@ public class WebCam extends JFrame {
 					Webcam webcam = webcams.get(i);
 					File file = new File(String.format("test-%d.jpg", i));
 					ImageIO.write(webcam.getImage(), "JPG", file);
-					System.out.format("Image for %s saved in %s \n", webcam.getName(), file);
+					System.out.format("The picture for %s saved in %s \n", webcam.getName(), file);
+					Recognizer.DisplayImage(Recognizer.getRecognize(file));
+					
 				}
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -109,9 +113,6 @@ public class WebCam extends JFrame {
 			panel.setFillArea(true);
 			panels.add(panel);
 		}
-
-		// start application with disable snapshot button - we enable it when
-		// webcam is started
 
 		btSnapMe.setEnabled(false);
 		btStop.setEnabled(false);
