@@ -23,10 +23,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import face.hack2017.Recognition;
+import face.hack2017.models.Person;
 
 public class Recognizer {
 	static String mood;
 	private static Logger logger = Logger.getLogger(Recognizer.class.getName());
+	public static List<Person> persons = new DataUploader("data.txt"). getPeople() ;
 
 	public Recognizer() {
 	}
@@ -75,6 +77,7 @@ public class Recognizer {
 			JsonArray objects) throws IOException {
 		String name;
 		List<String> object_names = new ArrayList<String>();
+		List<String> object_likes = new ArrayList<String>();
 		
 		if (outFolder.isDirectory() && image.isFile() && objects != null
 				&& objects.size() > 0) {
@@ -126,9 +129,15 @@ public class Recognizer {
 			
 			ImageIO.write(imageBuffer, "JPG", new File(outFolder
 					+ File.separator + image.getName()));
-			
+		
+			String string = null;
 			if(object_names.size() == 1){
-				Text2Speach.dospeak("Hi "+object_names.get(0)+ " how are you doing?", "kevin16");
+				for(Person person: persons){
+					if(person.getName().toLowerCase().trim().equals(object_names.get(0).toLowerCase().trim())){
+						string = person.toString();
+					}
+				}
+				Text2Speach.dospeak("Hi "+object_names.get(0)+ " how are you doing? "+string, "kevin16");
 			}
 			else if(object_names.size() == 2){
 				Text2Speach.dospeak("Hi "+object_names.get(0)+" and "+ object_names.get(1)+ " how are you doing?", "kevin16");

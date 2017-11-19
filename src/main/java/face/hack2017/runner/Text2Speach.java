@@ -18,9 +18,10 @@ public class Text2Speach {
         System.setProperty("FreeTTSSynthEngineCentral", "com.sun.speech.freetts.jsapi.FreeTTSEngineCentral");
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
         Central.registerEngineCentral("com.sun.speech.freetts.jsapi.FreeTTSEngineCentral");
+        
         SynthesizerModeDesc desc = new SynthesizerModeDesc(null,"general",  Locale.US,null,null);    
         Synthesizer synthesizer =  Central.createSynthesizer(desc);   
-        synthesizer.getSynthesizerProperties().setSpeakingRate(50);
+      
 
         synthesizer.allocate();    
         synthesizer.resume();     

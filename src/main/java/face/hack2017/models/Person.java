@@ -47,7 +47,7 @@ public class Person {
 
 	@Override
 	public String toString() {
-		return "Person [name=" + name + ", drink=" + drink + ", eat=" + eat + "]";
+		return "you likes drinking =" + drink + ", and eating =" + eat + "";
 	}
 
 }

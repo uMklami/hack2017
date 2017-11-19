@@ -1,4 +1,5 @@
 {"name": "aamir","drinks": "coca cola","eat": "fast food"}
-{"name": "joshua","drinks": "pepsi","eat": "rice"}
-{"name": "kah","drinks": "sprite","eat": "vegetarian"}
-{"name": "liang","drinks": "sky juice",	"eat": "chicken"}
+{"name": "Joshua","drinks": "pepsi","eat": "rice"}
+{"name": "Kah","drinks": "sprite","eat": "vegetarian"}
+{"name": "Liang","drinks": "sky juice",	"eat": "chicken"}
+{"name": "Sina","drinks": "sky juice",	"eat": "chicken"}
