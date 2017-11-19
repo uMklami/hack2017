@@ -137,7 +137,7 @@ public class Recognizer {
 						string = person.toString();
 					}
 				}
-				Text2Speach.dospeak("Hi "+object_names.get(0)+ " how are you doing? "+string, "kevin16");
+				Text2Speach.dospeak("Hi "+object_names.get(0)+ " how are you doing? Welcome home! "+string, "kevin16");
 			}
 			else if(object_names.size() == 2){
 				Text2Speach.dospeak("Hi "+object_names.get(0)+" and "+ object_names.get(1)+ " how are you doing?", "kevin16");
