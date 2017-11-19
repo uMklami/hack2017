@@ -6,14 +6,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -22,20 +21,10 @@ import javax.json.JsonObject;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.speech.*;
-
-import com.sun.speech.freetts.Voice;
-
-import java.util.*;
-
-import javax.speech.synthesis.*; 
-
-import com.sun.speech.freetts.VoiceManager;
 
 import face.hack2017.Recognition;
 
 public class Recognizer {
-	static String name;
 	static String mood;
 	private static Logger logger = Logger.getLogger(Recognizer.class.getName());
 
@@ -84,6 +73,9 @@ public class Recognizer {
 
 	public static void getAnnotateImage(File outFolder, File image,
 			JsonArray objects) throws IOException {
+		String name;
+		List<String> object_names = new ArrayList<String>();
+		
 		if (outFolder.isDirectory() && image.isFile() && objects != null
 				&& objects.size() > 0) {
 			BufferedImage imageBuffer = ImageIO.read(image);
@@ -91,10 +83,11 @@ public class Recognizer {
 			g.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND,
 					BasicStroke.JOIN_ROUND));
 			g.setFont(new Font("Courier", Font.BOLD, 20));
+			
 			for (int oi = 0; oi < objects.size(); oi++) {
+				
 				JsonObject object = objects.getJsonObject(oi);
-				JsonObject faceAnnotation = object
-						.getJsonObject("faceAnnotation");
+				JsonObject faceAnnotation = object.getJsonObject("faceAnnotation");
 				JsonArray vertices = faceAnnotation.getJsonObject("bounding")
 						.getJsonArray("vertices");
 				double confidence = faceAnnotation.getJsonNumber(
@@ -108,9 +101,11 @@ public class Recognizer {
 					yPoints[ni] = point.getInt("y");
 				}
 				name = object.getString("objectId");
+				object_names.add(object.getString("objectId"));
+				
 				// mood = object.getString(name);
 				if (confidence < 0.5) {
-					name = "Unknown";
+					object_names.add("Unknown");
 					g.setColor(Color.YELLOW);
 					logger.info("An 'Unknown' person was found since recognition "
 							+ "confidence "
@@ -121,15 +116,30 @@ public class Recognizer {
 					logger.info("Recognized " + name + " with confidence "
 							+ confidence);
 				}
+				
 				g.drawPolygon(xPoints, yPoints, nPoints);
 				int x = xPoints[nPoints - 1];
 				int y = yPoints[nPoints - 1];
 				g.drawString(name, x, y + 16);
 				g.drawString(String.valueOf(confidence), x, y + 36);
 			}
+			
 			ImageIO.write(imageBuffer, "JPG", new File(outFolder
 					+ File.separator + image.getName()));
-			Text2Speach.dospeak("Hi "+name+ "how are you doing?", "kevin16");
+			
+			if(object_names.size() == 1){
+				Text2Speach.dospeak("Hi "+object_names.get(0)+ " how are you doing?", "kevin16");
+			}
+			else if(object_names.size() == 2){
+				Text2Speach.dospeak("Hi "+object_names.get(0)+" and "+ object_names.get(1)+ " how are you doing?", "kevin16");
+			}
+			else if(object_names.size() == 3){
+				Text2Speach.dospeak("Hi "+object_names.get(0)+", "+ object_names.get(1)+ " and "+ object_names.get(2)+ " how are you doing?", "kevin16");
+			}
+			else {
+				Text2Speach.dospeak("Hi Everybody how are you doing?", "kevin16");
+			}
+			
 		}
 	}
 }
