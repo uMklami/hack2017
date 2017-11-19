@@ -1,0 +1,4 @@
+{"name": "aamir","drinks": "coca cola","eat": "fast food"}
+{"name": "joshua","drinks": "pepsi","eat": "rice"}
+{"name": "kah","drinks": "sprite","eat": "vegetarian"}
+{"name": "liang","drinks": "sky juice",	"eat": "chicken"}

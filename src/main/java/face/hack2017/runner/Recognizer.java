@@ -6,14 +6,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -22,15 +19,6 @@ import javax.json.JsonObject;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.speech.*;
-
-import com.sun.speech.freetts.Voice;
-
-import java.util.*;
-
-import javax.speech.synthesis.*; 
-
-import com.sun.speech.freetts.VoiceManager;
 
 import face.hack2017.Recognition;
 

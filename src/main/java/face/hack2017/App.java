@@ -1,6 +1,6 @@
 package face.hack2017;
 
-import face.hack2017.runner.Trainer;
+import face.hack2017.runner.DataUploader;
 
 /**
  * Hello world!
@@ -12,7 +12,7 @@ public class App
     {
         System.out.println( "FaceHack2017 started!" );
         System.out.println("Training.....");
-        Trainer tr = new Trainer();
-        tr.train();
+       
+        DataUploader datauploader = new DataUploader("data.txt");
     }
 }
