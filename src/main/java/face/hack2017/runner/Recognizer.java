@@ -103,7 +103,7 @@ public class Recognizer {
 				name = object.getString("objectId");
 				object_names.add(object.getString("objectId"));
 				
-				// mood = object.getString(name);
+
 				if (confidence < 0.5) {
 					object_names.add("Unknown");
 					g.setColor(Color.YELLOW);
